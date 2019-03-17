@@ -65,7 +65,7 @@ endfor
 " ファイルを読込む時にトライする文字エンコードの順序を確定する。漢字コード自
 " 動判別機能を利用する場合には別途iconv.dllが必要。iconv.dllについては
 " README_w32j.txtを参照。ユーティリティスクリプトを読み込むことで設定される。
-source $VIM/plugins/kaoriya/encode_japan.vim
+"source $VIM/plugins/kaoriya/encode_japan.vim
 " メッセージを日本語にする (Windowsでは自動的に判断・設定されている)
 if !(has('win32') || has('mac')) && has('multi_lang')
   if !exists('$LANG') || $LANG.'X' ==# 'X'
@@ -147,12 +147,8 @@ set formatoptions+=mM
 "---------------------------------------------------------------------------
 " GUI固有ではない画面表示の設定:
 "
-" 行番号を非表示 (number:表示)
-set nonumber
 " ルーラーを表示 (noruler:非表示)
 set ruler
-" タブや改行を表示 (list:表示)
-set nolist
 " どの文字でタブや改行を表示するかを設定
 "set listchars=tab:>-,extends:<,trail:-,eol:<
 " 長い行を折り返して表示 (nowrap:折り返さない)
@@ -227,39 +223,39 @@ endif
 set formatexpr=autofmt#japanese#formatexpr()
 
 " vimdoc-ja: 日本語ヘルプを無効化する.
-if kaoriya#switch#enabled('disable-vimdoc-ja')
-  let &rtp = join(filter(split(&rtp, ','), 'v:val !~ "vimdoc-ja"'), ',')
-endif
+"if kaoriya#switch#enabled('disable-vimdoc-ja')
+"  let &rtp = join(filter(split(&rtp, ','), 'v:val !~ "vimdoc-ja"'), ',')
+"endif
 
 " Copyright (C) 2011 KaoriYa/MURAOKA Taro
 
 "rubyのpath
 let g:ruby_path = 'd:/tool/ruby-1.8.7-p330-i386-mswin32/bin'
 
-set nocompatible 
-filetype off
+"set nocompatible 
+"filetype off
 
 "NeoBundle.vim
-set rtp+=$VIM/dotfiles/bundle/neobundle.vim
-call neobundle#rc('$VIM/dotfiles/bundle')
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'rails.vim'
-NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle 'tsaleh/vim-matchit'
-NeoBundle 'fuenor/qfixgrep.git'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimproc'
-NeoBundle 'Shougo/vimshell'
-NeoBundle 'Sixeight/unite-grep.git'
-NeoBundle 'h1mesuke/unite-outline.git'
+"set rtp+=$VIM/dotfiles/bundle/neobundle.vim
+"call neobundle#rc('$VIM/dotfiles/bundle')
+"NeoBundle 'thinca/vim-quickrun'
+"NeoBundle 'rails.vim'
+"NeoBundle 'vim-ruby/vim-ruby'
+"NeoBundle 'tsaleh/vim-matchit'
+"NeoBundle 'fuenor/qfixgrep.git'
+"NeoBundle 'Shougo/unite.vim'
+"NeoBundle 'Shougo/neocomplcache'
+"NeoBundle 'Shougo/vimfiler'
+"NeoBundle 'Shougo/vimproc'
+"NeoBundle 'Shougo/vimshell'
+"NeoBundle 'Sixeight/unite-grep.git'
+"NeoBundle 'h1mesuke/unite-outline.git'
 filetype plugin indent on 
 
 " neocomplcache 有効にする
-let g:neocomplcache_enable_at_startup  = 1
-let g:NeoComplCache_EnableAutoSelect   = 1
-let g:neocomplcache_enable_ignore_case = 0   "大文字小文字を区別する
+"let g:neocomplcache_enable_at_startup  = 1
+"let g:NeoComplCache_EnableAutoSelect   = 1
+"let g:neocomplcache_enable_ignore_case = 0   "大文字小文字を区別する
 "let g:neocomplcache_enable_auto_select=1   "補完時に一番上を選択する
 
 "quickrunをvimprocで非同期実行
@@ -275,11 +271,10 @@ let g:quickrun_config = {
 set hidden
 
 " タブ、改行文字を表示
-"set list
+set list
 
 " set list時の表示文字を設定
-"set listchars=tab:≫-,trail:-,eol:?,extends:≫,precedes:≪,nbsp:%
-
+set listchars=tab:^-,trail:-
 
 " number(行数)を表示
 set number
@@ -302,6 +297,9 @@ set incsearch
 " 検索結果をハイライト
 set hlsearch
 
+"ESC連打でハイライト解除
+nmap <Esc><Esc> :nohlsearch<CR><Esc>
+
 "全角スペースを目立たせる.全角スペースは以下の設定だと赤い下線
 highlight ZenkakuSpace cterm=underline ctermfg=red guibg=white
 match ZenkakuSpace /　/
@@ -312,11 +310,11 @@ set expandtab
 "OSのクリップボードを使用する
 set clipboard=unnamed
 
-"タブ文字、行末など不可視文字を表示する
-"set list
-
 "(no)検索をファイルの末尾まで検索したら、ファイルの先頭へループしない
 set nowrapscan
+
+"vim の矩形選択で文字が無くても右へ進める
+set virtualedit=block
 
 " Rubyでインデント幅を2にする
 au BufNewFile,BufRead * set tabstop=4 shiftwidth=4
@@ -326,28 +324,28 @@ au BufNewFile,BufRead *.rb set tabstop=2 shiftwidth=2
 au BufNewFile,BufRead *.yml set tabstop=2 shiftwidth=2
 
 "vimrc,vimrcを編集
-nnoremap <silent> <Space>ev  :<C-u>edit $VIM/dotfiles/_vimrc<CR>
-nnoremap <silent> <Space>eg  :<C-u>edit $VIM/dotfiles/_gvimrc<CR>
+nnoremap <silent> <Space>ev  :<C-u>edit $HOME/dotfiles/.vimrc<CR>
+nnoremap <silent> <Space>eg  :<C-u>edit $HOME/dotfiles/.gvimrc<CR>
 
 
 "### UNITE.vim ###"
 " 入力モードで開始する
-let g:unite_enable_start_insert=1
+"let g:unite_enable_start_insert=1
  
 " Uniteを開く時、垂直分割で開く
-let g:unite_enable_split_vertically=1
+"let g:unite_enable_split_vertically=1
 
 " 色々乗せたのだけとりあえず設定
-noremap <C-_> :Unite -buffer-name=files buffer file_mru bookmark file<CR>
+"noremap <C-_> :Unite -buffer-name=files buffer file_mru bookmark file<CR>
 
 
 " ファイルを開く時、ウィンドウを分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
-au FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+"au FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+"au FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
 
 " ファイルを開く時、ウィンドウを縦に分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
-au FileType unite inoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
+"au FileType unite nnoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
+"au FileType unite inoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
 
 " ESCキーを2回押すと終了する
 "au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
@@ -355,16 +353,16 @@ au FileType unite inoremap <silent> <buffer> <expr> <C-l> unite#do_action('vspli
 
 
 "uniteの機能の有効化
-let g:unite_source_history_yank_enable =1
-let g:unite_source_grep_command =1
-
-noremap :um :<C-u>Unite file_mru -buffer-name=file_mru<CR>
-noremap :uf :<C-u>Unite file_rec<CR>
-noremap :ur :<C-u>Unite -buffer-name=register register<CR>
-noremap :ub :<C-u>Unite buffer<CR>
-noremap :uy :<C-u>Unite history/yank<CR>
-noremap :ug :<C-u>Unite -auto-preview -no-quit grep<CR>
-noremap :uo :<C-u>Unite -auto-preview -no-quit outline<CR>
+"let g:unite_source_history_yank_enable =1
+"let g:unite_source_grep_command =1
+"
+"noremap :um :<C-u>Unite file_mru -buffer-name=file_mru<CR>
+"noremap :uf :<C-u>Unite file_rec<CR>
+"noremap :ur :<C-u>Unite -buffer-name=register register<CR>
+"noremap :ub :<C-u>Unite buffer<CR>
+"noremap :uy :<C-u>Unite history/yank<CR>
+"noremap :ug :<C-u>Unite -auto-preview -no-quit grep<CR>
+"noremap :uo :<C-u>Unite -auto-preview -no-quit outline<CR>
 
 " ステータスライン
 set statusline=%=\ [%{(&fenc!=''?&fenc:&enc)}/%{&ff}]\[%Y]\[%04l,%04v][%p%%]
@@ -397,5 +395,9 @@ map <C-S-tab> :tabprevious<cr>
 let g:vimfiler_as_default_explorer = 1
 
 " 
-let $MYGVIMRC=$VIM . "/dotfiles/_gvimrc"
-let $MYVIMRC=$VIM . "/dotfiles/_vimrc"
+"let $MYGVIMRC=$VIM . "/dotfiles/.gvimrc"
+let $MYVIMRC=$VIM . "/dotfiles/.vimrc"
+
+"escapeをCtl + j に割り当て
+imap <C-j> <esc>
+noremap! <C-j> <esc>
